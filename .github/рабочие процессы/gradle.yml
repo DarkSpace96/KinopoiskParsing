@@ -9,5 +9,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: С++
+      uses: actions/setup-cpp@v1
+      with:
+        cpp-version: 11
+    - name: С#
+      uses: actions/setup-cs@v1
+      with:
+        cs-version: 11
     - name: Build with Gradle
       run: ./gradlew build
