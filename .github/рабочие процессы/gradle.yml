@@ -13,6 +13,8 @@ jobs:
       uses: actions/setup-cpp@v1
       with:
         cpp-version: 11
+        
+    - uses: actions/checkout@v1
     - name: С#
       uses: actions/setup-cs@v1
       with:
