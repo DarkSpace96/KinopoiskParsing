@@ -1,0 +1,11 @@
+.linuxJobTemplate:
+  variables:
+    USE_CLANG: "false"
+    USE_CLAZY: "false"
+    SHOULD_BUILD: "false"
+    SHOULD_TEST: "false"
+    SHOULD_PACK: "false"
+    CMAKE_PREFIX_PATH: "/home/merdak/Qt/6.3.0/gcc_64"
+  tags:
+    - linux
+    - qt
