@@ -1,0 +1,62 @@
+include: '.gitlab-ci-runners-templates.yml'
+
+stages:
+  - Static-analysis
+  - Build
+  - Test
+  - Pack
+ 
+"Linux, Static-analysis":
+   extends: .linuxJobTemplate
+   stage: Static-analysis
+   variables:
+     USE_CLANG: "true"
+     USE_CLAZY: "true"
+   script:
+     - ruby static-analysis.rb
+   artifacts:
+     paths:
+       - build
+     expire_in: 15 m
+    
+"Linux, Build":
+   extends: .linuxJobTemplate
+   stage: Build
+   needs: ["Linux, Static-analysis"]
+   variables:
+     SHOULD_BUILD: "true"
+   script:
+     - ruby targets/linux/runPipeline.rb
+   artifacts:
+     paths:
+       - build/linux
+     expire_in: 15 m
+    
+"Linux, Test":
+   extends: .linuxJobTemplate
+   stage: Test
+   needs: ["Linux, Build"]
+   variables:
+     SHOULD_TEST: "true"
+   script:
+     - ruby targets/linux/runPipeline.rb
+   artifacts:
+     paths:
+       - build/linux/CICDSetup
+     expire_in: 15 m
+   
+"Linux, Pack":
+   extends: .linuxJobTemplate
+   stage: Pack
+   needs: ["Linux, Test"]
+   variables:
+     SHOULD_PACK: "true"
+   script:
+     - ruby targets/linux/runPipeline.rb
+   artifacts:
+     paths:
+       - build/linux/InstallerCICDSetup.run
+     expire_in: 1 w
+   only:
+     - main
+
